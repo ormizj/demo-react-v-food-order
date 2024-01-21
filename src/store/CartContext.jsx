@@ -20,17 +20,18 @@ const cartReducer = (state, action) => {
 
             } else {
                 const existingItem = state.items[existingCartItemIndex];
-                const updatedItem = { // need to take the entire previous state, or bugs will occur
+                const updatedItem = {
                     ...existingItem,
-                    quantity: existingItem.quantity++,
-                }
+                    quantity: existingItem.quantity + 1, // must use addition, and not "++"
+                };
                 updatedItems[existingCartItemIndex] = updatedItem;
 
-                // updatedItems[existingCartItemIndex].quantity++; // this will not work
+                // updatedItems[existingCartItemIndex].quantity++; // this will not work in StrictMode, and also not recommended
             }
 
             return { ...state, items: updatedItems };
         }
+
         case 'REMOVE_ITEM': {
             const existingCartItemIndex = state.items.findIndex(item => item.id === action.id);
             const existingCartItem = state.items[existingCartItemIndex];
@@ -40,20 +41,22 @@ const cartReducer = (state, action) => {
                 updatedItems.splice(existingCartItemIndex, 1);
 
             } else {
-                const updatedItem = { // need to take the entire previous state, or bugs will occur
+                const updatedItem = {
                     ...existingCartItem,
-                    quantity: existingCartItem.quantity--,
-                }
+                    quantity: existingCartItem.quantity - 1, // must use subtraction, and not "--"
+                };
                 updatedItems[existingCartItemIndex] = updatedItem;
 
-                // updatedItems[existingCartItemIndex].quantity--; // this will not work
+                // updatedItems[existingCartItemIndex].quantity--; // this will not work in StrictMode, and also not recommended
             }
 
-            return { ...state, items: updatedItems }
+            return { ...state, items: updatedItems };
         }
+
         case 'CLEAR_CART': {
             return { ...state, items: [] };
         }
+
         default:
             return state;
     }
